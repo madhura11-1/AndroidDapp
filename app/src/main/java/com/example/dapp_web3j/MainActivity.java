@@ -2,16 +2,23 @@ package com.example.dapp_web3j;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 
@@ -37,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private Button create_wallet, get_address, send_ether;
     private EditText password, password1, wallet_name1, amount, to;
     private TextView wallet_name, import_wallet, address, balance;
+    private ImageButton connect;
     private String walletDirectory, walletName;
     private Web3j web3j;
 
@@ -46,11 +54,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupBouncyCastle();
         setGlobalvariabls();
-        connectToEthereum();
         setOnclicklistners();
     }
 
     private void setOnclicklistners() {
+
+        connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                connectToEthereum();
+            }
+        });
 
         create_wallet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,21 +150,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void connectToEthereum() {
-        //CustomDialog customDialog = new CustomDialog();
-        //customDialog.showDialog();
         web3j = Web3j.build(new HttpService("https://rinkeby.infura.io/v3/bbc32ee079884ad9a6115dbc37904c10"));
         try {
             Web3ClientVersion clientVersion = web3j.web3ClientVersion().sendAsync().get();
             if (!clientVersion.hasError()) {
-                Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
-                //customDialog.closeDialog();
+                Resources res = getApplicationContext().getResources();
+                connect.setBackgroundColor(Color.RED);
+                Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, clientVersion.getError().getMessage(), Toast.LENGTH_LONG).show();
-                //customDialog.closeDialog();
             }
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            //customDialog.closeDialog();
         }
 
     }
@@ -217,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
         to = findViewById(R.id.to);
         address = findViewById(R.id.address);
         balance = findViewById(R.id.balance);
+        connect = findViewById(R.id.connect);
         import_wallet = findViewById(R.id.import_account);
         walletDirectory = getFilesDir().getAbsolutePath();
         import_wallet.setPaintFlags(import_wallet.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

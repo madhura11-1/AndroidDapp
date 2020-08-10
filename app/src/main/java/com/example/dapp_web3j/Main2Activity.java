@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class Main2Activity extends AppCompatActivity {
     private TextView address,balance;
     private Button import_wallet,transfer,getbalance;
     private  String mnemonicS,pass;
+    private ImageButton connect;
     private Web3j web3j;
     private Bip32ECKeyPair masterKeypair;
     private Bip32ECKeyPair  derivedKeyPair;
@@ -45,12 +47,18 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         setGlobalvariables();
-        connectToEthereum();
         setOnClicklistner();
 
     }
 
     private void setOnClicklistner() {
+
+        connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                connectToEthereum();
+            }
+        });
 
         import_wallet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +174,7 @@ public class Main2Activity extends AppCompatActivity {
         transfer = findViewById(R.id.send_ether);
         address = findViewById(R.id.address);
         balance = findViewById(R.id.balance);
+        connect = findViewById(R.id.connect);
         to = findViewById(R.id.to);
         getbalance = findViewById(R.id.import_address);
     }

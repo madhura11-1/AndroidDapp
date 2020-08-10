@@ -5,7 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Main2Activity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="16dp">
+
+    <ImageButton
+        android:id="@+id/connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:src="@drawable/ethereum2"
+        android:maxHeight="30dp"
+        android:maxWidth="30dp"
+        android:padding="3dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:background="@drawable/circular_button"
+        android:layout_marginRight="10dp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
