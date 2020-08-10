@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create your own wallet"
+            android:layout_gravity="center"
+            android:layout_margin="25dp"/>
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Enter a passsword for new wallet"
+            android:textSize="15sp"
+            android:layout_gravity="center"/>
+        <Button
+            android:id="@+id/create_wallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Wallet"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:id="@+id/wallet_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:text="Your  wallet  name  will  appear  here  after  you  create  a  new  wallet"
+            android:layout_margin="20dp"/>
+
+        <TextView
+            android:id="@+id/import_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Import wallet account from mnemonic"
+            android:clickable="true"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get wallet address"
+            android:layout_gravity="center"
+            android:layout_margin="25dp"/>
+
+        <EditText
+            android:id="@+id/wallet_name1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Enter the name of existing wallet"
+            android:textSize="15sp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/password1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Enter the password of existing wallet"
+            android:textSize="15sp"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/get_Address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Address and Balance"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"/>
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Your address will appear here"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Your balance will appear here"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+        <EditText
+            android:id="@+id/to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Enter address of account"
+            android:textSize="15sp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Enter ether amount"
+            android:textSize="15sp"
+            android:layout_gravity="center"/>
+
+
+            <Button
+                android:id="@+id/send_ether"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send Ether"
+                android:layout_gravity="center" />
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

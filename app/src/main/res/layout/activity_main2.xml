@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Main2Activity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Import Account"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"/>
+
+    <EditText
+        android:id="@+id/mnemonic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter the mnemonic here"
+        android:textSize="15sp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+    <Button
+        android:id="@+id/import_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Import"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Account Address"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"/>
+    <Button
+        android:id="@+id/import_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Address and Balance"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Your address will appear here"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Your balance will appear here"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+
+    <EditText
+        android:id="@+id/to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter address to send amount"
+        android:textSize="15sp"
+        android:layout_gravity="center"/>
+
+    <EditText
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter ether amount"
+        android:textSize="15sp"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/send_ether"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Ether"
+        android:layout_gravity="center" />
+
+
+
+
+
+
+</LinearLayout>
