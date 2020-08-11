@@ -6,16 +6,6 @@
     android:orientation="vertical"
     android:padding="30dp">
 
-    <!--<com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleY="0.5"
-        android:scaleX="0.5"
-        app:lottie_url="paperplane.json"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>-->
-
     <TextView
         android:id="@+id/loading"
         android:layout_width="wrap_content"

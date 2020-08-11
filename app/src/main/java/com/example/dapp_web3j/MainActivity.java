@@ -2,10 +2,7 @@ package com.example.dapp_web3j;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -16,11 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-
-import com.airbnb.lottie.LottieAnimationView;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.web3j.crypto.Credentials;
@@ -47,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton connect;
     private String walletDirectory, walletName;
     private Web3j web3j;
+    private CustomDialog customDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                    customDialog.showDialog();
                 try {
                     String password_string = password.getText().toString().trim();
                     if (password_string.isEmpty()) {
@@ -77,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         walletName = WalletUtils.generateNewWalletFile(password_string, new File(walletDirectory));
                         wallet_name.setText(walletName);
+                        customDialog.closeDialog();
 
                         System.out.println("wallet location: " + walletDirectory + "/" + walletName);
                     }
@@ -129,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                                 .sendAsync().get();
                         System.out.println("Status" + credentials.getAddress() + " " + (Convert.fromWei(ethGetBalance.getBalance().toString(), Convert.Unit.ETHER)).toString());
                         TransactionReceipt transactionReceipt = Transfer.sendFunds(web3j, credentials, to1, BigDecimal.valueOf(amt), Convert.Unit.ETHER).sendAsync().get();
-                        //TransactionReceipt receipt = Transfer.sendFunds(web3,credentials,"0xD931DFE25660081fc25729c6114D96Cc131cA9d1",BigDecimal.valueOf(1),Convert.Unit.ETHER).send();
                         Toast.makeText(MainActivity.this, "Transaction complete: " + transactionReceipt.getTransactionHash(), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
@@ -150,12 +144,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void connectToEthereum() {
+        customDialog.showDialog();
         web3j = Web3j.build(new HttpService("https://rinkeby.infura.io/v3/bbc32ee079884ad9a6115dbc37904c10"));
         try {
             Web3ClientVersion clientVersion = web3j.web3ClientVersion().sendAsync().get();
             if (!clientVersion.hasError()) {
-                Resources res = getApplicationContext().getResources();
-                connect.setBackgroundColor(Color.RED);
+                customDialog.closeDialog();
+                connect.setBackgroundResource(R.drawable.connected);
                 Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, clientVersion.getError().getMessage(), Toast.LENGTH_LONG).show();
@@ -163,13 +158,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
-
     }
 
     public class CustomDialog {
 
         Dialog dialog;
-        LottieAnimationView lottieAnimationView;
         TextView loading;
 
         public void showDialog() {
@@ -177,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.dialog);
-            //lottieAnimationView = findViewById(R.id.animationView);
 
             dialog.show();
         }
@@ -229,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
         address = findViewById(R.id.address);
         balance = findViewById(R.id.balance);
         connect = findViewById(R.id.connect);
+        customDialog = new CustomDialog();
         import_wallet = findViewById(R.id.import_account);
         walletDirectory = getFilesDir().getAbsolutePath();
         import_wallet.setPaintFlags(import_wallet.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

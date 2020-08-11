@@ -13,8 +13,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
-
 import org.web3j.crypto.Bip32ECKeyPair;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.MnemonicUtils;
@@ -37,6 +35,7 @@ public class Main2Activity extends AppCompatActivity {
     private  String mnemonicS,pass;
     private ImageButton connect;
     private Web3j web3j;
+    private CustomDialog customDialog;
     private Bip32ECKeyPair masterKeypair;
     private Bip32ECKeyPair  derivedKeyPair;
     private int[] derivationPath = {44 | Bip32ECKeyPair.HARDENED_BIT, 60 | Bip32ECKeyPair.HARDENED_BIT, 0 | Bip32ECKeyPair.HARDENED_BIT, 0,0};
@@ -68,6 +67,7 @@ public class Main2Activity extends AppCompatActivity {
                     Toast.makeText(Main2Activity.this, "Please enter the mnemonic", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    customDialog.showDialog();
                     try {
                         pass = null;
 
@@ -79,6 +79,7 @@ public class Main2Activity extends AppCompatActivity {
 
                         // Load the wallet for the derived key
                         Credentials credentials = Credentials.create(derivedKeyPair);
+                        customDialog.closeDialog();
                         Toast.makeText(Main2Activity.this, credentials.getAddress(), Toast.LENGTH_SHORT).show();
                         //EthGetBalance ethGetBalance = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
 
@@ -122,13 +123,13 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     private void connectToEthereum() {
-        CustomDialog customDialog = new CustomDialog();
         customDialog.showDialog();
         web3j = Web3j.build(new HttpService("https://rinkeby.infura.io/v3/bbc32ee079884ad9a6115dbc37904c10"));
         try {
             Web3ClientVersion clientVersion = web3j.web3ClientVersion().sendAsync().get();
             if (!clientVersion.hasError()) {
                 customDialog.closeDialog();
+                connect.setBackgroundResource(R.drawable.connected);
             } else {
                 Toast.makeText(this, clientVersion.getError().getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -141,14 +142,12 @@ public class Main2Activity extends AppCompatActivity {
     public class CustomDialog {
 
         Dialog dialog;
-        LottieAnimationView lottieAnimationView;
         TextView loading;
         public void showDialog() {
             dialog = new Dialog(Main2Activity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.dialog);
-//            lottieAnimationView = findViewById(R.id.animationView);
 
             dialog.show();
         }
@@ -176,6 +175,7 @@ public class Main2Activity extends AppCompatActivity {
         balance = findViewById(R.id.balance);
         connect = findViewById(R.id.connect);
         to = findViewById(R.id.to);
+        customDialog = new CustomDialog();
         getbalance = findViewById(R.id.import_address);
     }
 }
