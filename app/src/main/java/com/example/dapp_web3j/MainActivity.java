@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.skydoves.elasticviews.ElasticImageView;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.web3j.crypto.Credentials;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private Button create_wallet, get_address, send_ether;
     private EditText password, password1, wallet_name1, amount, to;
     private TextView wallet_name, import_wallet, address, balance;
-    private ImageButton connect;
+    private ElasticImageView connect;
     private String walletDirectory, walletName;
     private Web3j web3j;
     private CustomDialog customDialog;
@@ -220,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         to = findViewById(R.id.to);
         address = findViewById(R.id.address);
         balance = findViewById(R.id.balance);
-        connect = findViewById(R.id.connect);
+        connect = (ElasticImageView)findViewById(R.id.connect);
         customDialog = new CustomDialog();
         import_wallet = findViewById(R.id.import_account);
         walletDirectory = getFilesDir().getAbsolutePath();

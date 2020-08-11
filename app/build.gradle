@@ -36,5 +36,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'org.web3j:core:4.6.0-android'
+    implementation "com.github.skydoves:elasticviews:2.0.7"
     implementation 'com.android.support:multidex:1.0.3'
 }

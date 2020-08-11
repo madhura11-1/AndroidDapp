@@ -16,7 +16,7 @@
             android:orientation="vertical"
             android:layout_margin="16dp">
 
-        <ImageButton
+        <com.skydoves.elasticviews.ElasticImageView
             android:id="@+id/connect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,10 +25,13 @@
             android:maxHeight="30dp"
             android:maxWidth="30dp"
             android:padding="3dp"
+            android:clickable="true"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:background="@drawable/circular_button"
             android:layout_marginRight="10dp"
+            app:imageView_scale="0.7"
+            app:imageView_duration="300"
             />
 
         <TextView

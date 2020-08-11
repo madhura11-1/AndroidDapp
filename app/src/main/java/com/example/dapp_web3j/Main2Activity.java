@@ -1,7 +1,5 @@
 package com.example.dapp_web3j;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,9 +7,12 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.skydoves.elasticviews.ElasticImageView;
 
 import org.web3j.crypto.Bip32ECKeyPair;
 import org.web3j.crypto.Credentials;
@@ -29,16 +30,16 @@ import java.math.BigDecimal;
 
 public class Main2Activity extends AppCompatActivity {
 
-    private EditText mnemonic,amount,to;
-    private TextView address,balance;
-    private Button import_wallet,transfer,getbalance;
-    private  String mnemonicS,pass;
-    private ImageButton connect;
+    private EditText mnemonic, amount, to;
+    private TextView address, balance;
+    private Button import_wallet, transfer, getbalance;
+    private String mnemonicS, pass;
+    private ElasticImageView connect;
     private Web3j web3j;
     private CustomDialog customDialog;
     private Bip32ECKeyPair masterKeypair;
-    private Bip32ECKeyPair  derivedKeyPair;
-    private int[] derivationPath = {44 | Bip32ECKeyPair.HARDENED_BIT, 60 | Bip32ECKeyPair.HARDENED_BIT, 0 | Bip32ECKeyPair.HARDENED_BIT, 0,0};
+    private Bip32ECKeyPair derivedKeyPair;
+    private int[] derivationPath = {44 | Bip32ECKeyPair.HARDENED_BIT, 60 | Bip32ECKeyPair.HARDENED_BIT, 0 | Bip32ECKeyPair.HARDENED_BIT, 0, 0};
 
 
     @Override
@@ -63,10 +64,9 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mnemonicS = mnemonic.getText().toString().trim();
-                if(mnemonicS.isEmpty()){
+                if (mnemonicS.isEmpty()) {
                     Toast.makeText(Main2Activity.this, "Please enter the mnemonic", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     customDialog.showDialog();
                     try {
                         pass = null;
@@ -99,7 +99,7 @@ public class Main2Activity extends AppCompatActivity {
                     address.setText(credentials.getAddress());
                     balance.setText((Convert.fromWei(ethGetBalance.getBalance().toString(), Convert.Unit.ETHER)).toString());
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(Main2Activity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
@@ -113,8 +113,8 @@ public class Main2Activity extends AppCompatActivity {
                     Credentials credentials = Credentials.create(derivedKeyPair);
                     Double amt = Double.parseDouble(amount.getText().toString().trim());
                     String to1 = to.getText().toString();
-                    TransactionReceipt transactionReceipt = Transfer.sendFunds(web3j, credentials,to1, BigDecimal.valueOf(amt), Convert.Unit.ETHER).sendAsync().get();
-                }catch (Exception e){
+                    TransactionReceipt transactionReceipt = Transfer.sendFunds(web3j, credentials, to1, BigDecimal.valueOf(amt), Convert.Unit.ETHER).sendAsync().get();
+                } catch (Exception e) {
                     Toast.makeText(Main2Activity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -134,7 +134,8 @@ public class Main2Activity extends AppCompatActivity {
                 Toast.makeText(this, clientVersion.getError().getMessage(), Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();;
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            ;
         }
 
     }
@@ -143,6 +144,7 @@ public class Main2Activity extends AppCompatActivity {
 
         Dialog dialog;
         TextView loading;
+
         public void showDialog() {
             dialog = new Dialog(Main2Activity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -152,7 +154,7 @@ public class Main2Activity extends AppCompatActivity {
             dialog.show();
         }
 
-        public void closeDialog(){
+        public void closeDialog() {
       /*      loading = findViewById(R.id.loading);
             loading.setText("Connected :)");*/
             Handler handler = new Handler();
@@ -161,7 +163,7 @@ public class Main2Activity extends AppCompatActivity {
                 public void run() {
                     dialog.dismiss();
                 }
-            },3000);
+            }, 3000);
         }
 
     }
