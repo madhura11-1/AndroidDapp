@@ -95,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         Credentials credentials = WalletUtils.loadCredentials(walletPassword, walletDirectory + "/" + enterName);
                         System.out.println("Your address is " + credentials.getAddress());
 
-                        EthGetBalance ethGetBalance = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameterName.LATEST)
-                                .sendAsync().get();
+                        EthGetBalance ethGetBalance = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
                         System.out.println((Convert.fromWei(ethGetBalance.getBalance().toString(), Convert.Unit.ETHER)).toString());
 
                         address.setText(credentials.getAddress());
