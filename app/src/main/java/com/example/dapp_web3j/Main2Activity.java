@@ -1,8 +1,11 @@
 package com.example.dapp_web3j;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -31,11 +34,12 @@ import java.math.BigDecimal;
 public class Main2Activity extends AppCompatActivity {
 
     private EditText mnemonic, amount, to;
-    private TextView address, balance;
+    private TextView address, balance,smartcontract;
     private Button import_wallet, transfer, getbalance;
     private String mnemonicS, pass;
     private ElasticImageView connect;
     private Web3j web3j;
+    private Credentials credentials;
     private CustomDialog customDialog;
     private Bip32ECKeyPair masterKeypair;
     private Bip32ECKeyPair derivedKeyPair;
@@ -78,7 +82,7 @@ public class Main2Activity extends AppCompatActivity {
                         derivedKeyPair = Bip32ECKeyPair.deriveKeyPair(masterKeypair, derivationPath);
 
                         // Load the wallet for the derived key
-                        Credentials credentials = Credentials.create(derivedKeyPair);
+                        credentials = Credentials.create(derivedKeyPair);
                         customDialog.closeDialog();
                         Toast.makeText(Main2Activity.this, credentials.getAddress(), Toast.LENGTH_SHORT).show();
                         //EthGetBalance ethGetBalance = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
@@ -117,6 +121,18 @@ public class Main2Activity extends AppCompatActivity {
                 } catch (Exception e) {
                     Toast.makeText(Main2Activity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+
+        smartcontract.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Main2Activity.this,Main3Activity.class);
+                intent.putExtra("Web3j", (Parcelable) web3j);
+                intent.putExtra("Credentials", (Parcelable) credentials);
+                intent.putExtra("flag",2);
+                startActivity(intent);
             }
         });
 
@@ -176,8 +192,10 @@ public class Main2Activity extends AppCompatActivity {
         address = findViewById(R.id.address);
         balance = findViewById(R.id.balance);
         connect = findViewById(R.id.connect);
+        smartcontract = findViewById(R.id.smart_contract);
         to = findViewById(R.id.to);
         customDialog = new CustomDialog();
         getbalance = findViewById(R.id.import_address);
+        smartcontract.setPaintFlags(smartcontract.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 }

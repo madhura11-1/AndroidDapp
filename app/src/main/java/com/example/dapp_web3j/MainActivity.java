@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -28,18 +29,20 @@ import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
 import java.io.File;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.security.Provider;
 import java.security.Security;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Serializable {
 
     private Button create_wallet, get_address, send_ether;
     private EditText password, password1, wallet_name1, amount, to;
-    private TextView wallet_name, import_wallet, address, balance;
+    private TextView wallet_name, import_wallet, address, balance,smartContract;
     private ElasticImageView connect;
     private String walletDirectory, walletName;
     private Web3j web3j;
+    private Credentials credentials;
     private CustomDialog customDialog;
 
     @Override
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     if (walletPassword.isEmpty() || enterName.isEmpty()) {
                         Toast.makeText(MainActivity.this, "Please fill all the details", Toast.LENGTH_SHORT).show();
                     } else {
-                        Credentials credentials = WalletUtils.loadCredentials(walletPassword, walletDirectory + "/" + enterName);
+                        credentials = WalletUtils.loadCredentials(walletPassword, walletDirectory + "/" + enterName);
                         System.out.println("Your address is " + credentials.getAddress());
 
                         EthGetBalance ethGetBalance = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
@@ -137,6 +140,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Main2Activity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
+        smartContract.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,Main3Activity.class);
+                intent.putExtra("Web3j", (Parcelable) web3j);
+                intent.putExtra("Credentials", (Parcelable) credentials);
+                intent.putExtra("flag",1);
                 startActivity(intent);
             }
         });
@@ -220,10 +234,12 @@ public class MainActivity extends AppCompatActivity {
         to = findViewById(R.id.to);
         address = findViewById(R.id.address);
         balance = findViewById(R.id.balance);
+        smartContract = findViewById(R.id.smart_contract);
         connect = (ElasticImageView)findViewById(R.id.connect);
         customDialog = new CustomDialog();
         import_wallet = findViewById(R.id.import_account);
         walletDirectory = getFilesDir().getAbsolutePath();
+        smartContract.setPaintFlags(smartContract.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         import_wallet.setPaintFlags(import_wallet.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 }

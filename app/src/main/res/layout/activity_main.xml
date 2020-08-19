@@ -142,6 +142,15 @@
                 android:layout_height="wrap_content"
                 android:text="Send Ether"
                 android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/smart_contract"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Try Smart Contract Code"
+                android:textSize="17sp"
+                android:layout_gravity="center"
+                android:layout_margin="70dp"/>
         </LinearLayout>
     </ScrollView>
 
