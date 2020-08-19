@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -29,18 +28,17 @@ import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
 import java.io.File;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.security.Provider;
 import java.security.Security;
 
-public class MainActivity extends AppCompatActivity implements Serializable {
+public class MainActivity extends AppCompatActivity {
 
     private Button create_wallet, get_address, send_ether;
     private EditText password, password1, wallet_name1, amount, to;
-    private TextView wallet_name, import_wallet, address, balance,smartContract;
+    private TextView wallet_name, import_wallet, address, balance, smartContract;
     private ElasticImageView connect;
-    private String walletDirectory, walletName;
+    private String walletDirectory, walletName,GlobalPassword,GlobalWalletName;
     private Web3j web3j;
     private Credentials credentials;
     private CustomDialog customDialog;
@@ -67,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             @Override
             public void onClick(View v) {
 
-                    customDialog.showDialog();
+                customDialog.showDialog();
                 try {
                     String password_string = password.getText().toString().trim();
                     if (password_string.isEmpty()) {
@@ -75,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                     } else {
                         walletName = WalletUtils.generateNewWalletFile(password_string, new File(walletDirectory));
                         wallet_name.setText(walletName);
+                        GlobalWalletName = walletName;
+                        GlobalPassword = password_string;
                         customDialog.closeDialog();
 
                         System.out.println("wallet location: " + walletDirectory + "/" + walletName);
@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                         address.setText(credentials.getAddress());
                         balance.setText((Convert.fromWei(ethGetBalance.getBalance().toString(), Convert.Unit.ETHER)).toString());
+                        GlobalWalletName = enterName;
+                        GlobalPassword = walletPassword;
                     }
                 } catch (Exception e) {
                     Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -128,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         System.out.println("Status" + credentials.getAddress() + " " + (Convert.fromWei(ethGetBalance.getBalance().toString(), Convert.Unit.ETHER)).toString());
                         TransactionReceipt transactionReceipt = Transfer.sendFunds(web3j, credentials, to1, BigDecimal.valueOf(amt), Convert.Unit.ETHER).sendAsync().get();
                         Toast.makeText(MainActivity.this, "Transaction complete: " + transactionReceipt.getTransactionHash(), Toast.LENGTH_SHORT).show();
+                        GlobalWalletName = enterName;
+                        GlobalPassword = walletPassword;
                     }
                 } catch (Exception e) {
                     Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -147,10 +151,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         smartContract.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,Main3Activity.class);
-                intent.putExtra("Web3j", (Parcelable) web3j);
-                intent.putExtra("Credentials", (Parcelable) credentials);
-                intent.putExtra("flag",1);
+                Intent intent = new Intent(MainActivity.this, Main3Activity.class);
+                intent.putExtra("walletName",GlobalWalletName);
+                intent.putExtra("Password",GlobalPassword);
+                intent.putExtra("flag", 1);
                 startActivity(intent);
             }
         });
@@ -235,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         address = findViewById(R.id.address);
         balance = findViewById(R.id.balance);
         smartContract = findViewById(R.id.smart_contract);
-        connect = (ElasticImageView)findViewById(R.id.connect);
+        connect = (ElasticImageView) findViewById(R.id.connect);
         customDialog = new CustomDialog();
         import_wallet = findViewById(R.id.import_account);
         walletDirectory = getFilesDir().getAbsolutePath();

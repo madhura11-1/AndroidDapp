@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -129,8 +128,7 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Main2Activity.this,Main3Activity.class);
-                intent.putExtra("Web3j", (Parcelable) web3j);
-                intent.putExtra("Credentials", (Parcelable) credentials);
+                intent.putExtra("mnemonic", mnemonicS);
                 intent.putExtra("flag",2);
                 startActivity(intent);
             }
