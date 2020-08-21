@@ -20,6 +20,8 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.MnemonicUtils;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
@@ -107,7 +109,7 @@ public class Main3Activity extends AppCompatActivity {
              @Override
              public void onClick(View v) {
 
-                 registerClass = Register.load("0x354ecc67016baca8e4eaf3ecfff7a04a18639ea9",web3j,credentials,new DefaultGasProvider());
+                 registerClass = Register.load("0xf801215bc7ba640f4f196fceed2cc231698d74b6",web3j,credentials,new DefaultGasProvider());
                  Toast.makeText(Main3Activity.this, registerClass.getContractAddress(), Toast.LENGTH_SHORT).show();
              }
          });
@@ -124,7 +126,7 @@ public class Main3Activity extends AppCompatActivity {
                          TransactionReceipt receipt = registerClass.registerUser(name,addressN).send();
                          Toast.makeText(Main3Activity.this, receipt.getFrom() + "\n" + receipt.getTo(), Toast.LENGTH_LONG).show();
                      } catch (Exception e) {
-                         Toast.makeText(Main3Activity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                         Toast.makeText(Main3Activity.this, "Unable to load", Toast.LENGTH_SHORT).show();
                      }
                  }
              }
@@ -134,12 +136,21 @@ public class Main3Activity extends AppCompatActivity {
              @Override
              public void onClick(View v) {
                  String add = inputAddress.getText().toString().trim();
+                 final String[] name = new String[1];
+                 final String[] address = new String[1];
                  if(add.isEmpty()){
                      Toast.makeText(Main3Activity.this, "Please enter smtg", Toast.LENGTH_SHORT).show();
                  }else{
                      try {
-                         //registerClass.viewDetials(add).sendAsync().get();
-                         //receipt.getTransactionHash()
+                         TransactionReceipt receipt = registerClass.viewDetials(add).sendAsync().get();
+                         Toast.makeText(Main3Activity.this, receipt.getTransactionHash(), Toast.LENGTH_SHORT).show();
+                         registerClass.viewedEventFlowable(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST)
+                                 .subscribe(event -> {
+                                     name[0] = event.name;
+                                     address[0] = event.address1;
+                                 }).toString();
+                         viewName.setText(name[0]);
+                         viewAddress.setText(address[0]);
                      } catch (Exception e) {
                          Toast.makeText(Main3Activity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                      }
