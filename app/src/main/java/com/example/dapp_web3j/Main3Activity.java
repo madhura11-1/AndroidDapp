@@ -101,7 +101,6 @@ public class Main3Activity extends AppCompatActivity {
              public void onClick(View v) {
                  AsyncClass asyncClass = new AsyncClass(Main3Activity.this);
                  asyncClass.execute();
-
              }
          });
 
@@ -109,8 +108,9 @@ public class Main3Activity extends AppCompatActivity {
              @Override
              public void onClick(View v) {
 
-                 registerClass = Register.load("0xf801215bc7ba640f4f196fceed2cc231698d74b6",web3j,credentials,new DefaultGasProvider());
-                 Toast.makeText(Main3Activity.this, registerClass.getContractAddress(), Toast.LENGTH_SHORT).show();
+                 AsyncClass2 asyncClass2 = new AsyncClass2(Main3Activity.this);
+                 asyncClass2.execute();
+
              }
          });
 
@@ -122,11 +122,12 @@ public class Main3Activity extends AppCompatActivity {
                  if(name.isEmpty() || addressN.isEmpty()){
                      Toast.makeText(Main3Activity.this, "Enter the required fields", Toast.LENGTH_SHORT).show();
                  }else{
+                    // Toast.makeText(Main3Activity.this, registerClass.getContractAddress(), Toast.LENGTH_SHORT).show();
                      try {
-                         TransactionReceipt receipt = registerClass.registerUser(name,addressN).send();
+                         TransactionReceipt receipt = registerClass.registerUser(name,addressN).sendAsync().get();
                          Toast.makeText(Main3Activity.this, receipt.getFrom() + "\n" + receipt.getTo(), Toast.LENGTH_LONG).show();
                      } catch (Exception e) {
-                         Toast.makeText(Main3Activity.this, "Unable to load", Toast.LENGTH_SHORT).show();
+                         Toast.makeText(Main3Activity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                      }
                  }
              }
@@ -136,24 +137,11 @@ public class Main3Activity extends AppCompatActivity {
              @Override
              public void onClick(View v) {
                  String add = inputAddress.getText().toString().trim();
-                 final String[] name = new String[1];
-                 final String[] address = new String[1];
                  if(add.isEmpty()){
                      Toast.makeText(Main3Activity.this, "Please enter smtg", Toast.LENGTH_SHORT).show();
                  }else{
-                     try {
-                         TransactionReceipt receipt = registerClass.viewDetials(add).sendAsync().get();
-                         Toast.makeText(Main3Activity.this, receipt.getTransactionHash(), Toast.LENGTH_SHORT).show();
-                         registerClass.viewedEventFlowable(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST)
-                                 .subscribe(event -> {
-                                     name[0] = event.name;
-                                     address[0] = event.address1;
-                                 }).toString();
-                         viewName.setText(name[0]);
-                         viewAddress.setText(address[0]);
-                     } catch (Exception e) {
-                         Toast.makeText(Main3Activity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                     }
+                     AsyncClass3 asyncClass3 = new AsyncClass3(Main3Activity.this);
+                     asyncClass3.execute(add);
                  }
              }
          });
@@ -167,7 +155,7 @@ public class Main3Activity extends AppCompatActivity {
 
     }
 
-    public void showToast(String msg){
+    /*public void showToast(String msg){
 
         Handler handler = new Handler(Looper.getMainLooper()){
             @Override
@@ -175,7 +163,7 @@ public class Main3Activity extends AppCompatActivity {
                 Toast.makeText(Main3Activity.this, msg, Toast.LENGTH_SHORT).show();
             }
         };
-    }
+    }*/
 
     private void setGlobalVariables() {
 
@@ -253,4 +241,88 @@ public class Main3Activity extends AppCompatActivity {
 
         }
     }
+
+     private static class AsyncClass2 extends AsyncTask<Void,Void,String> {
+
+        private WeakReference<Main3Activity> weakReference;
+        int flag =0;
+
+         AsyncClass2(Main3Activity activity){
+             weakReference = new WeakReference<Main3Activity>(activity);
+         }
+
+         @Override
+         protected String doInBackground(Void... voids) {
+             Main3Activity activity = weakReference.get();
+             if(activity == null || activity.isFinishing()){
+                 return "Activity null";
+             }
+             try {
+                 activity.registerClass = Register.load("0xf801215bc7ba640f4f196fceed2cc231698d74b6",activity.web3j,activity.credentials,new DefaultGasProvider());
+
+                 if(activity.registerClass.isValid()){
+                     flag = 1;
+                 }
+                 else{
+                     flag = 0;
+                 }
+             } catch (IOException e) {
+                 Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
+             }
+
+             if(flag == 1){
+                 return activity.registerClass.getContractAddress() + "  Happy;)";
+             }
+             else{
+                 return "Async2 failed";
+             }
+         }
+
+         @Override
+         protected void onPostExecute(String s) {
+             super.onPostExecute(s);
+
+             Main3Activity activity = weakReference.get();
+             if(activity == null || activity.isFinishing()){
+                 return;
+             }
+             Toast.makeText(activity, s, Toast.LENGTH_LONG).show();
+         }
+     }
+
+     private static class AsyncClass3 extends AsyncTask<String,Void,String>{
+         private WeakReference<Main3Activity> weakReference;
+         int flag =0;
+
+         AsyncClass3(Main3Activity activity){
+             weakReference = new WeakReference<Main3Activity>(activity);
+         }
+
+         @Override
+         protected String doInBackground(String... strings) {
+             Main3Activity activity = weakReference.get();
+             if(activity == null || activity.isFinishing()){
+                 return "Activity null";
+             }
+             String nameA;
+             try {
+                 TransactionReceipt receipt = activity.registerClass.viewDetials(strings[0]).sendAsync().get();
+                 activity.registerClass.viewedEventFlowable(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST)
+                         .subscribe(event -> {
+                             //nameA = event.name;
+                             //addressA = event.address1;
+                         }).toString();
+             } catch (Exception e) {
+                 Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
+             }
+
+             //return nameA + " " + addressA;
+             return null;
+         }
+
+
+
+         //activity.viewName.setText(name[0]);
+                // activity.viewAddress.setText(address[0]);
+     }
 }
