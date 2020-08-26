@@ -3,9 +3,7 @@ package com.example.dapp_web3j;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,8 +18,6 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.MnemonicUtils;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
@@ -34,7 +30,7 @@ public class Main3Activity extends AppCompatActivity {
 
     private EditText registerName,registerAddress,inputAddress;
     private Button register,view,deploy,load;
-    private TextView viewName,viewAddress;
+    private TextView viewName;
     private Web3j web3j;
     private Credentials credentials;
     private int choice;
@@ -173,7 +169,6 @@ public class Main3Activity extends AppCompatActivity {
         registerName = findViewById(R.id.register_name);
         inputAddress = findViewById(R.id.type_address);
         view = findViewById(R.id.button_address);
-        viewAddress = findViewById(R.id.view_address);
         viewName = findViewById(R.id.view_name);
         deploy = findViewById(R.id.deploy);
         load = findViewById(R.id.load);
@@ -304,25 +299,38 @@ public class Main3Activity extends AppCompatActivity {
              if(activity == null || activity.isFinishing()){
                  return "Activity null";
              }
-             String nameA;
+             final String[] nameA = new String[1];
+             final String[] addressA = new String[1];
              try {
                  TransactionReceipt receipt = activity.registerClass.viewDetials(strings[0]).sendAsync().get();
-                 activity.registerClass.viewedEventFlowable(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST)
-                         .subscribe(event -> {
-                             //nameA = event.name;
-                             //addressA = event.address1;
-                         }).toString();
+                 Log.d("Hello",receipt.getTransactionHash());
+                 nameA[0] = activity.registerClass.getViewedEvents(receipt).listIterator(0).next().name;
+                 addressA[0] = activity.registerClass.getViewedEvents(receipt).listIterator(0).next().address1;
+
+
+
+                        /* .subscribe(event -> {
+                               nameA[0] = event.name;
+                               addressA[0] = event.address1;
+                         });*/
+                       // nameA[0] = receipt.getLogs().get(0).toString() + "hello";
              } catch (Exception e) {
-                 Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
+                 nameA[0] = e.getMessage();
              }
 
-             //return nameA + " " + addressA;
-             return null;
+                 return "Name = " + nameA[0] + "\nAddress = " + addressA[0] ;
+
          }
 
+         @Override
+         protected void onPostExecute(String s) {
+             super.onPostExecute(s);
+             Main3Activity activity = weakReference.get();
+             if(activity == null || activity.isFinishing()){
+                 return;
+             }
+             activity.viewName.setText(s);
 
-
-         //activity.viewName.setText(name[0]);
-                // activity.viewAddress.setText(address[0]);
+         }
      }
 }
